@@ -1,0 +1,43 @@
+# Semestrální práce - MongoDB a Neo4j
+Tato semestrální práce je vytvořena pro předmět NI-PDB.
+Obsahuje 2 databáze -- MongoDB a Neo4j, nad kterými jsou vytvářeny dotazy týkající se datasetu. Dataset obsahuje data a statistiky o hokejových zápasech ligy NHL. Dataset je podrobněji popsán ve zprávě (*report.pdf*)
+
+## Popis repozitáře
+* *report.pdf* - Obsahuje popis datasetu, popis procesu vkládání dat a dotazy nad databázemi
+* *scripts/*
+	* *scripts/create_scripts.ipynb* - notebook obsahující zdrojový kód vytvářející skripty/csv/json soubory pro vkládání dat
+	* *scripts/mongodb/* - složka obsahující *json* soubory pro vkládání dat, konkrétně *game.json* a *player.json*
+	* *scripts/neo4j/* - složka obsahující csv soubory a textové soubory obsahující příkazy pro vložení dat
+* *databases/*
+	* *databases/mongodb/* - uložená mongodb databáze
+	* *databases/neo4j/* - uložená neo4j databáze
+* *docker-compose.yaml*- soubor pro konfiguraci docker kontejnerů
+	
+## Spuštění databází
+Databáze jsou spouštěné přes Docker. V aktuálním adresáři se spustí následující příkaz, který spustí kontejnery.
+```
+docker-compose up
+```
+Nyní běží MongoDB aplikace na portu 27017 a Neo4j na 7474.
+
+Přihlašovací údaje do databáze Neo4j jsou username:neo4j a heslo:admin. MongoDB nemá nastaveny žádné.
+
+kontejnery se ukončí ukončením posledního příkazu.
+
+## Vkládání dat
+Opětovné vkládání dat do databáze není nutné, ale projistotu jsou přiloženy.
+
+### MongoDB
+Vložení dvou kolekcí pomocí json souborů popsaných výše provedením následujících příkazů:
+Tento příkaz změní prostředí na prostředí kontejneru.
+```
+docker exec -it pdb-mongo-nhl bash
+```
+Tyto příkazy importují kolekce do databáze.
+```
+mongoimport --db nhl --collection game scripts/mongodb/game.json --jsonArray --legacy
+mongoimport --db nhl --collection player scripts/mongodb/player.json --jsonArray --legacy
+```
+
+### Neo4j
+Vkládání dat do Neo4j databáze jsem dělal přes webové rozhraní databáze [localhost:7474/browser](localhost:7474/browser). Do konzole byly vloženy příkazy uložené v textových souborech ve složce *scripts/neo4j*.

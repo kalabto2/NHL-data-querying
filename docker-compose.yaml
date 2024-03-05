@@ -1,0 +1,16 @@
+version: '3'
+services:
+  mongodb:
+    image: mongo:5.0.13
+    container_name: pdb-mongo-nhl
+    network_mode: "host"
+    volumes:
+      - ./databases/mongo:/data/db
+      - ./scripts/mongodb/:/scripts
+  neo4j:
+    image: neo4j
+    container_name: pdb-neo4j-nhl
+    network_mode: "host"
+    volumes:
+      - ./databases/neo4j:/var/lib/neo4j/data/
+      - ./scripts/neo4j/:/var/lib/neo4j/import/data/

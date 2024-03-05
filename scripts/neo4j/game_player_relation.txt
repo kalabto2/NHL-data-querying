@@ -1,0 +1,26 @@
+LOAD CSV WITH HEADERS FROM 'file:///data/game_player_relation.csv' AS gp
+    with gp where gp.team is not null
+    match (g:GAME) where g.game_id = toInteger(gp.game_id)
+    match (p:PLAYER) where p.player_id = toInteger(gp.player_id)
+    merge (p)-[pl:PLAYS {
+            timeOnIce: toInteger(gp.timeOnIce),
+            assists: toInteger(gp.assists),
+            goals: toInteger(gp.goals),
+            shots: toInteger(gp.shots),
+            hits: toInteger(gp.hits),
+            powerPlayGoals: toInteger(gp.powerPlayGoals),
+            powerPlayAssists: toInteger(gp.powerPlayAssists),
+            penaltyMinutes: toInteger(gp.penaltyMinutes),
+            faceOffWins: toInteger(gp.faceOffWins),
+            faceoffTaken: toInteger(gp.faceoffTaken),
+            takeaways: toInteger(gp.takeaways),
+            giveaways: toInteger(gp.giveaways),
+            shortHandedGoals: toInteger(gp.shortHandedGoals),
+            shortHandedAssists: toInteger(gp.shortHandedAssists),
+            blocked: toInteger(gp.blocked),
+            plusMinus: toInteger(gp.plusMinus),
+            evenTimeOnIce: toInteger(gp.evenTimeOnIce),
+            shortHandedTimeOnIce: toInteger(gp.shortHandedTimeOnIce),
+            powerPlayTimeOnIce: toInteger(gp.powerPlayTimeOnIce),
+            team: gp.team
+    } ]->(g)
